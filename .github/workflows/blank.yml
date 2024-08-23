@@ -45,4 +45,4 @@ jobs:
           if-no-files-found: error
           compression-level: 6
           overwrite: true
-          path: bin/Debug/net6.0/TestArtifact.exe
+          path: bin/Debug/net6.0/TestArtifact.dll
