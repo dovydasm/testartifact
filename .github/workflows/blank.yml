@@ -47,26 +47,28 @@ jobs:
         run: dotnet build
         working-directory: ${{ github.workspace }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: test
-          if-no-files-found: error
-          compression-level: 6
-          overwrite: true
-          path: bin/Debug/net6.0/TestArtifact.dll
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: test
+#          if-no-files-found: error
+#          compression-level: 6
+#          overwrite: true
+#          path: bin/Debug/net6.0/TestArtifact.dll
 
       - name: Upload to blob storage
-        uses: azure/cli@v1
+        uses: azure/cli@v2
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT_NAME }}
           AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCOUNT_KEY }}
           AZURE_CONTAINER_NAME:  ${{ secrets.AZURE_CONTAINER_NAME }}
         with:
           inlineScript: |
+            echo "HELLO"
+            echo "$AZURE_STORAGE_ACCOUNT"
             az storage blob upload \
-              --account-name $AZURE_STORAGE_ACCOUNT \
-              --account-key $AZURE_STORAGE_KEY \
-              --container-name $AZURE_CONTAINER_NAME \
-              --file bin/Debug/net6.0/TestArtifact.dll \
-              --name /resources/fripper/TestArtifact.dll
+              --account-name "$AZURE_STORAGE_ACCOUNT" \
+              --account-key "$AZURE_STORAGE_KEY" \
+              --container-name "$AZURE_CONTAINER_NAME" \
+              --file "bin/Debug/net6.0/TestArtifact.dll" \
+              --name "/resources/fripper/TestArtifact.dll"
