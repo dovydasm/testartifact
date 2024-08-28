@@ -59,14 +59,11 @@ jobs:
       - name: Upload to blob storage
         uses: azure/cli@v2
         env:
-          AZURE_STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT_NAME }}
-          AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCOUNT_KEY }}
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           AZURE_CONTAINER_NAME:  ${{ secrets.AZURE_CONTAINER_NAME }}
         with:
-          inlineScript: |
-            echo "HELLO"
-            echo "${{ secrets.AZURE_CONTAINER_NAME }}"
-            echo "BYE"
+          inlineScript: |         
             az storage blob upload \
               --account-name "$AZURE_STORAGE_ACCOUNT" \
               --account-key "$AZURE_STORAGE_KEY" \
