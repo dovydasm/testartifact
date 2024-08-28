@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions-
 
-name: CI
+name: Build and upload
 
 # Controls when the workflow will run
 on:
@@ -34,6 +34,15 @@ jobs:
         with:
             dotnet-version: '8.0.x'
 
+   #   - name: Set up Python
+   #     uses: actions/setup-python@v4
+   #     with:
+   #       python-version: '3.x'
+
+    #  - name: Install Azure Storage Blob package
+    #    run: |
+   #       pip install azure-storage-blob
+
       - name: Build
         run: dotnet build
         working-directory: ${{ github.workspace }}
@@ -46,3 +55,18 @@ jobs:
           compression-level: 6
           overwrite: true
           path: bin/Debug/net6.0/TestArtifact.dll
+
+      - name: Upload to blob storage
+        uses: azure/cli@v1
+        env:
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+          AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCOUNT_KEY }}
+          AZURE_CONTAINER_NAME:  ${{ secrets.AZURE_CONTAINER_NAME }}
+        with:
+          inlineScript: |
+            az storage blob upload \
+              --account-name $AZURE_STORAGE_ACCOUNT \
+              --account-key $AZURE_STORAGE_KEY \
+              --container-name $AZURE_CONTAINER_NAME \
+              --file bin/Debug/net6.0/TestArtifact.dll \
+              --name /resources/fripper/TestArtifact.dll
