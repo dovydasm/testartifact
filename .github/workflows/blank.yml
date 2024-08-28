@@ -18,16 +18,12 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -57,13 +53,13 @@ jobs:
 #          path: bin/Debug/net6.0/TestArtifact.dll
 
       - name: Upload to blob storage
-        uses: azure/cli@v2
+#        uses: azure/cli@v2
+        shell: pwsh
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           AZURE_CONTAINER_NAME:  ${{ secrets.AZURE_CONTAINER_NAME }}
-        with:
-          inlineScript: |         
+        run: |         
             az storage blob upload \
               --account-name "$AZURE_STORAGE_ACCOUNT" \
               --account-key "$AZURE_STORAGE_KEY" \
