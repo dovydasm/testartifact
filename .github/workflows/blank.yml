@@ -52,9 +52,14 @@ jobs:
 #          overwrite: true
 #          path: bin/Debug/net6.0/TestArtifact.dll
 
+   #   - name: Install Azure CLI
+  #      run: |
+  #        choco install azure-cli
+
       - name: Install Azure CLI
-        run: |
-          choco install azure-cli
+        uses: crazy-max/ghaction-chocolatey@v3
+        with:
+          args: install azure-cli
 
       - name: Upload to blob storage
 #        uses: azure/cli@v2
