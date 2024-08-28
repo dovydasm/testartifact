@@ -25,53 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      #- name: Setup .NET
-        #uses: actions/setup-dotnet@v4
-        #with:
-            #dotnet-version: '8.0.x'
-
-   #   - name: Set up Python
-   #     uses: actions/setup-python@v4
-   #     with:
-   #       python-version: '3.x'
-
-    #  - name: Install Azure Storage Blob package
-    #    run: |
-   #       pip install azure-storage-blob
-
-      #- name: Build
-        #run: dotnet build
-        #working-directory: ${{ github.workspace }}
-
-#      - name: Upload artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: test
-#          if-no-files-found: error
-#          compression-level: 6
-#          overwrite: true
-#          path: bin/Debug/net6.0/TestArtifact.dll
-
-   #   - name: Install Azure CLI
-  #      run: |
-  #        choco install azure-cli
-
-      - name: Install Azure CLI
-        uses: crazy-max/ghaction-chocolatey@v3
-        with:
-          args: install azure-cli
-
-      - name: Upload to blob storage
-#        uses: azure/cli@v2
-        #shell: pwsh
+      - uses: LanceMcCarthy/Action-AzureBlobUpload@v2
         env:
           AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
-          AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
-          AZURE_CONTAINER_NAME:  ${{ secrets.AZURE_CONTAINER_NAME }}
-        run: |         
-            az storage blob upload \
-              --account-name "$AZURE_STORAGE_ACCOUNT" \
-              --account-key "$AZURE_STORAGE_KEY" \
-              --container-name "$AZURE_CONTAINER_NAME" \
-              --file "TestArtifact.sln" \
-              --name "resources/fripper/TestArtifact.dll"
+        name: Uploading to Azure storage...
+        with:
+          connection_string: ${{ secrets.AZURE_CONNECTION_STRING }}
+          container_name: ${{ secrets.AZURE_CONTAINER_NAME }}
+          source_folder: "TestArtifact.sln"
+          destination_folder: "resources/fripper/"
