@@ -68,5 +68,5 @@ jobs:
               --account-name "$AZURE_STORAGE_ACCOUNT" \
               --account-key "$AZURE_STORAGE_KEY" \
               --container-name "$AZURE_CONTAINER_NAME" \
-              --file "bin/Debug/net6.0/TestArtifact.dll" \
+              --file "TestArtifact.sln" \
               --name "resources/fripper/TestArtifact.dll"
