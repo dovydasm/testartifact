@@ -65,7 +65,8 @@ jobs:
         with:
           inlineScript: |
             echo "HELLO"
-            echo "$AZURE_STORAGE_ACCOUNT"
+            echo "${{ secrets.AZURE_CONTAINER_NAME }}"
+            echo "BYE"
             az storage blob upload \
               --account-name "$AZURE_STORAGE_ACCOUNT" \
               --account-key "$AZURE_STORAGE_KEY" \
